@@ -1,9 +1,18 @@
 variables:
-  IMAGE_NAME: kurtay/gitlab-ecs-app
+  IMAGE_NAME: gitlab-ecs-app
+  ECR: 632296647497.dkr.ecr.eu-central-1.amazonaws.com
 
 image: docker:latest
 services:
   - docker:dind
+
+before_script:
+  - apk add --no-cache py-pip
+  - pip install awscli
+  - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+  - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+  - aws configure set region $AWS_DEFAULT_REGION
+  - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR
 
 stages:
   - build
@@ -69,7 +78,7 @@ maven-test-3:
 image-build:
   stage: image
   script:
-    - docker build -t $IMAGE_NAME .
+    - docker build -t "${ECR}/${IMAGE_NAME}" .
   when: manual
   only:
     - main
@@ -78,10 +87,8 @@ image-build:
 
 image-push:
   stage: image
-  before_script:
-    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - docker push $IMAGE_NAME
+    - docker push "${ECR}/${IMAGE_NAME}"
   dependencies:
     - image-build  
   when: manual
@@ -92,9 +99,6 @@ image-push:
 
 deploy-ecs:
   stage: deploy
-  image:
-    name: amazon/aws-cli
-    entrypoint: [""]
   script:
     - aws --version
     - aws sts get-caller-identity
