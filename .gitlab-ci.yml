@@ -103,7 +103,7 @@ deploy-aws-cli:
     - aws iam create-role --role-name ecsTaskExecutionRole --assume-role-policy-document file://ecs/role-policies/tasks-execution-role.json
     - aws ecs create-cluster --cluster-name demo-cluster --region $AWS_DEFAULT_REGION
     - aws ecs register-task-definition --cli-input-json file://ecs/fargate-task.json
-    - aws ecs create-service --cli-input-json file://ecs/fargate-service.json
+    - aws ecs create-service --cli-input-json file://ecs/fargate-service.json --region $AWS_DEFAULT_REGION
   when: manual
   only:
     - main
