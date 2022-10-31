@@ -1,5 +1,5 @@
 {
-    "cluster": "demo-cluster",
+    "cluster": "gitlab-cluster",
     "serviceName": "demo-service",
     "taskDefinition": "demo-app",
     "launchType": "FARGATE",
