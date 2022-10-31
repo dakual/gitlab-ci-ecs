@@ -9,6 +9,7 @@ stages:
   - build
   - test
   - image
+  - deploy
 
 maven-build:
   stage: build
@@ -65,7 +66,7 @@ maven-test-3:
   tags:
     - dev
 
-docker-build:
+image-build:
   stage: image
   script:
     - docker build -t $IMAGE_NAME .
@@ -75,7 +76,7 @@ docker-build:
   tags:
     - dev
 
-docker-push:
+image-push:
   stage: image
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
@@ -83,6 +84,22 @@ docker-push:
     - docker push $IMAGE_NAME
   dependencies:
     - docker-build  
+  when: manual
+  only:
+    - main
+  tags:
+    - dev
+
+deploy-ecs:
+    stage: deploy
+    image:
+        name: amazon/aws-cli
+        entrypoint: [""]
+    variables:
+        AWS_PROFILE: test
+    script:
+        - aws --version
+        - aws sts get-caller-identity
   when: manual
   only:
     - main
