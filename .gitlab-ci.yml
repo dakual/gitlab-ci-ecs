@@ -83,7 +83,7 @@ image-push:
   script:
     - docker push $IMAGE_NAME
   dependencies:
-    - docker-build  
+    - image-build  
   when: manual
   only:
     - main
