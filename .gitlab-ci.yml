@@ -73,8 +73,6 @@ docker-build:
     - docker build -t $IMAGE_NAME .
     - docker push $IMAGE_NAME
   when: manual
-  dependencies:
-    - test
   only:
     - main
   tags:
