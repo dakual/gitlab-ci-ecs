@@ -8,7 +8,7 @@ services:
 stages:
   - build
   - test
-  - docker
+  - image
 
 maven-build:
   stage: build
@@ -66,9 +66,7 @@ maven-test-3:
     - dev
 
 docker-build:
-  stage: docker
-  before_script:
-    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  stage: image
   script:
     - docker build -t $IMAGE_NAME .
   when: manual
@@ -78,7 +76,7 @@ docker-build:
     - dev
 
 docker-push:
-  stage: docker
+  stage: image
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
