@@ -91,15 +91,15 @@ image-push:
     - dev
 
 deploy-ecs:
-    stage: deploy
-    image:
-        name: amazon/aws-cli
-        entrypoint: [""]
-    variables:
-        AWS_PROFILE: test
-    script:
-        - aws --version
-        - aws sts get-caller-identity
+  stage: deploy
+  image:
+    name: amazon/aws-cli
+    entrypoint: [""]
+  variables:
+    AWS_PROFILE: test
+  script:
+    - aws --version
+    - aws sts get-caller-identity
   when: manual
   only:
     - main
