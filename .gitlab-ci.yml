@@ -102,7 +102,7 @@ deploy-aws-cli:
   script:
     - aws ecs create-cluster --cluster-name demo-cluster --region $AWS_DEFAULT_REGION
     - aws ecs register-task-definition --cli-input-json file://ecs/fargate-task.json
-    - aws ecs create-service --cli-input-json file://ecs/fargate-service.json --region $AWS_DEFAULT_REGION
+    - aws ecs create-service --cli-input-json file://ecs/fargate-service.json
   when: manual
   only:
     - main
