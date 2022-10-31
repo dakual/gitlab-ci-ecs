@@ -11,7 +11,7 @@ maven-build:
     - mvn clean package -B
   artifacts:
     paths:
-      - target/*.jar
+      - app/target/*.jar
   when: manual
   only:
     - main
@@ -27,7 +27,7 @@ maven-test:
     - mvn -Dtest=AppTest#hello test
   artifacts:
     paths:
-      - target/*.jar
+      - app/target/*.jar
   when: manual
   only:
     - main
