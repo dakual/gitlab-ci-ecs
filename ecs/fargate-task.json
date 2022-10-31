@@ -5,7 +5,7 @@
     "containerDefinitions": [
         {
             "name": "demo-app", 
-            "image": "632296647497.dkr.ecr.eu-central-1.amazonaws.com:gitlab-ecs-app:latest", 
+            "image": "632296647497.dkr.ecr.eu-central-1.amazonaws.com/gitlab-ecs-app:latest", 
             "logConfiguration": {
               "logDriver": "awslogs",
               "options": {
