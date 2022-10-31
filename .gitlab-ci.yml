@@ -2,6 +2,8 @@ variables:
   IMAGE_NAME: gitlab-ecs-app:latest
   ECR: 632296647497.dkr.ecr.eu-central-1.amazonaws.com
   CLUSTER_NAME: gitlab-cluster
+  SERVICE_NAME: demo-service
+  TASK_NAME: demo-app
 
 image: docker:latest
 services:
@@ -98,11 +100,23 @@ image-push:
   tags:
     - dev
 
-deploy-aws-cli:
+deploy-aws-cli-create:
+  stage: deploy
+  script:
+    - aws ecs create-cluster --cluster-name $CLUSTER_NAME --region $AWS_DEFAULT_REGION
+    - aws ecs register-task-definition --cli-input-json file://ecs/fargate-task.json
+    - aws ecs create-service --cli-input-json file://ecs/fargate-service.json
+  when: manual
+  only:
+    - main
+  tags:
+    - dev
+
+deploy-aws-cli-update:
   stage: deploy
   script:
     - aws ecs register-task-definition --cli-input-json file://ecs/fargate-task.json
-    - aws ecs update-service --cli-input-json file://ecs/fargate-service.json
+    - aws ecs update-service --region $AWS_DEFAULT_REGION --cluster $CLUSTER_NAME --service $SERVICE_NAME  --task-definition $TASK_NAME
   when: manual
   only:
     - main

@@ -10,7 +10,7 @@ aws ecs create-cluster --cluster-name gitlab-cluster --region eu-central-1
 
 Create ECS Service
 ```sh
-aws ecs create-service --cli-input-json file://fargate-service.json --region eu-central-1
+aws ecs create-service --cli-input-json file://ecs/fargate-service.json --region eu-central-1
 ```
 
 Creating the task execution IAM role
