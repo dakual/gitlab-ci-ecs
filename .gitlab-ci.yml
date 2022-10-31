@@ -1,6 +1,14 @@
+variables:
+  IMAGE_NAME: kurtay/gitlab-ecs-app
+
+image: docker:latest
+services:
+  - docker:dind
+
 stages:
   - build
   - test
+  - docker
 
 maven-build:
   stage: build
@@ -57,3 +65,17 @@ maven-test-3:
   tags:
     - dev
 
+docker-build:
+  stage: build
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  script:
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+  when: manual
+  dependencies:
+    - test
+  only:
+    - main
+  tags:
+    - dev
