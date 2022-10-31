@@ -12,7 +12,7 @@ stages:
 
 maven-build:
   stage: build
-  image: maven:3.8-jdk-11-slim
+  image: maven:3.6-jdk-8-alpine
   before_script:
     - cd app
   script:
@@ -28,7 +28,7 @@ maven-build:
 
 maven-test-1:
   stage: test
-  image: maven:3.8-jdk-11-slim
+  image: maven:3.6-jdk-8-alpine
   before_script:
     - cd app
   script:
@@ -41,7 +41,7 @@ maven-test-1:
 
 maven-test-2:
   stage: test
-  image: maven:3.8-jdk-11-slim
+  image: maven:3.6-jdk-8-alpine
   before_script:
     - cd app
   script:
@@ -54,7 +54,7 @@ maven-test-2:
 
 maven-test-3:
   stage: test
-  image: maven:3.8-jdk-11-slim
+  image: maven:3.6-jdk-8-alpine
   before_script:
     - cd app
   script:
@@ -83,6 +83,8 @@ docker-push:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
     - docker push $IMAGE_NAME
+  dependencies:
+    - docker-build  
   when: manual
   only:
     - main

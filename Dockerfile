@@ -1,11 +1,11 @@
-FROM python:3.9-slim-buster
+FROM openjdk:8-jre-alpine
+
+RUN mkdir /app
 
 WORKDIR /app
 
-COPY app/* ./
+COPY app/target/*.jar app.jar
 
-RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 8080
 
-EXPOSE 5000
-
-CMD [ "python", "./run.py" ]
+ENTRYPOINT ["java", "-jar", "app.jar"]
