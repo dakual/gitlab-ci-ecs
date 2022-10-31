@@ -66,11 +66,22 @@ maven-test-3:
     - dev
 
 docker-build:
-  stage: build
+  stage: docker
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
     - docker build -t $IMAGE_NAME .
+  when: manual
+  only:
+    - main
+  tags:
+    - dev
+
+docker-push:
+  stage: docker
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  script:
     - docker push $IMAGE_NAME
   when: manual
   only:
