@@ -1,0 +1,64 @@
+variables:
+  IMAGE_NAME: kurtay/gitlab-app
+  IMAGE_TAG: py-1.1
+
+stages:
+  - test
+  - build
+  - deploy
+
+stage_test:
+  stage: test
+  image: python:3.9-slim-buster
+  before_script:
+    - cd app
+    - pip install -r requirements.txt
+  script:
+    - echo "Starting to test"
+    - python3 -m unittest
+  when: manual
+  only:
+    - main
+  tags:
+    - prod
+
+stage_build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  script:
+    - echo "Starting to build"
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+  when: manual
+  dependencies:
+    - stage_test
+  only:
+    - main
+  tags:
+    - prod
+
+stage_deploy:
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  stage: deploy
+  script:
+    - echo "Starting to deploy"
+    - kubectl config get-contexts
+    - kubectl config use-context dakual/gitlab-ci-cd-demo:development
+    - sed -i "s|<IMAGE>|${IMAGE_NAME}|g" k8s/deployment.yaml
+    - sed -i "s|<VERSION>|${IMAGE_TAG}|g" k8s/deployment.yaml
+    - kubectl apply -f k8s/deployment.yaml --record
+    - kubectl apply -f k8s/service.yaml 
+  when: manual
+  dependencies:
+    - stage_build
+  only:
+    - main
+  tags:
+    - prod
+
