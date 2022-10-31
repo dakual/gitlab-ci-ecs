@@ -1,15 +1,15 @@
 {
-    "family": "demo-app", 
+    "family": "gitlab-app-task-test", 
     "networkMode": "awsvpc",
     "executionRoleArn": "arn:aws:iam::632296647497:role/ecsTaskExecutionRole",
     "containerDefinitions": [
         {
-            "name": "demo-app", 
-            "image": "632296647497.dkr.ecr.eu-central-1.amazonaws.com/gitlab-ecs-app:latest", 
+            "name": "gitlab-app-container-test", 
+            "image": "632296647497.dkr.ecr.eu-central-1.amazonaws.com/gitlab-app-test:latest", 
             "logConfiguration": {
               "logDriver": "awslogs",
               "options": {
-                  "awslogs-group": "demo-app",
+                  "awslogs-group": "/ecs/gitlab-app-task-test",
                   "awslogs-region": "eu-central-1",
                   "awslogs-create-group": "true",
                   "awslogs-stream-prefix": "ecs"
@@ -30,4 +30,4 @@
     ], 
     "cpu": "256", 
     "memory": "512"
-  }
+}
