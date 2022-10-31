@@ -1,6 +1,22 @@
 stages:
-  - test
   - build
+  - test
+
+maven-build:
+  stage: build
+  image: maven:3.8-jdk-11-slim
+  before_script:
+    - cd app
+  script:
+    - mvn clean package -B
+  artifacts:
+    paths:
+      - app/target/*.jar
+  when: manual
+  only:
+    - main
+  tags:
+    - dev
 
 maven-test-1:
   stage: test
@@ -41,18 +57,3 @@ maven-test-3:
   tags:
     - dev
 
-maven-build:
-  stage: build
-  image: maven:3.8-jdk-11-slim
-  before_script:
-    - cd app
-  script:
-    - mvn clean package -B
-  artifacts:
-    paths:
-      - app/target/*.jar
-  when: manual
-  only:
-    - main
-  tags:
-    - dev
