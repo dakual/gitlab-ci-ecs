@@ -95,8 +95,6 @@ deploy-ecs:
   image:
     name: amazon/aws-cli
     entrypoint: [""]
-  variables:
-    AWS_PROFILE: default
   script:
     - aws --version
     - aws sts get-caller-identity
