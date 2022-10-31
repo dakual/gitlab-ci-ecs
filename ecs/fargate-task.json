@@ -1,0 +1,33 @@
+{
+    "family": "demo-app", 
+    "networkMode": "awsvpc",
+    "executionRoleArn": "arn:aws:iam::632296647497:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "demo-app", 
+            "image": "632296647497.dkr.ecr.eu-central-1.amazonaws.com:gitlab-ecs-app:latest", 
+            "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "demo-app",
+                  "awslogs-region": "eu-central-1",
+                  "awslogs-create-group": "true",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          },
+            "portMappings": [
+                {
+                    "containerPort": 8080, 
+                    "hostPort": 8080, 
+                    "protocol": "tcp"
+                }
+            ], 
+            "essential": true
+        }
+    ], 
+    "requiresCompatibilities": [
+        "FARGATE"
+    ], 
+    "cpu": "256", 
+    "memory": "512"
+  }
