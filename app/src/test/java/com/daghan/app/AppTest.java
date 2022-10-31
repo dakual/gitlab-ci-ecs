@@ -10,11 +10,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AppTest 
 {
     @Test
-    void hello() {
+    void test1() {
         AppController controller     = new AppController();
         Map<String, Object> response = controller.helloWorld();
         String status                = response.get("status").toString();
 
         assertEquals("success", status);
+    }
+
+    @Test
+    void test2() {
+        assertEquals(1, 1);
+    }
+
+    @Test
+    void test3() {
+        assertEquals("ok", "ok");
     }
 }

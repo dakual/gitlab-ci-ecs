@@ -18,13 +18,13 @@ maven-build:
   tags:
     - dev
 
-maven-test:
+maven-test-1:
   stage: test
   image: maven:3.8-jdk-11-slim
   before_script:
     - cd app
   script:
-    - mvn -Dtest=AppTest#hello test
+    - mvn -Dtest=AppTest#test1 test
   artifacts:
     paths:
       - app/target/*.jar
@@ -34,3 +34,34 @@ maven-test:
   tags:
     - dev
 
+maven-test-2:
+  stage: test
+  image: maven:3.8-jdk-11-slim
+  before_script:
+    - cd app
+  script:
+    - mvn -Dtest=AppTest#test2 test
+  artifacts:
+    paths:
+      - app/target/*.jar
+  when: manual
+  only:
+    - main
+  tags:
+    - dev
+
+maven-test-3:
+  stage: test
+  image: maven:3.8-jdk-11-slim
+  before_script:
+    - cd app
+  script:
+    - mvn -Dtest=AppTest#test3 test
+  artifacts:
+    paths:
+      - app/target/*.jar
+  when: manual
+  only:
+    - main
+  tags:
+    - dev
