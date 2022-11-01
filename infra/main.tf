@@ -57,10 +57,23 @@ module "ecs" {
   container_environment       = [{ name = "LOG_LEVEL", value = "DEBUG" }, { name = "PORT", value = var.container_port }]
 }
 
+module "r53" {
+  source        = "./r53"
+  name          = var.name
+  environment   = var.environment
+  domain        = var.domain
+  alb_zone_id   = module.alb.zone_id
+  alb_dns_name  = module.alb.dns_name
+}
+
 output "aws_ecr_repository_url" {
     value = module.ecr.repository_url
 }
 
 output "aws_alb_dns_name" {
     value = module.alb.dns_name
+}
+
+output "domain" {
+    value = var.domain
 }

@@ -103,9 +103,12 @@ resource "aws_alb_listener" "https" {
     }
 }
 
+output "zone_id" {
+  value = aws_lb.main.zone_id
+}
+
 output "dns_name" {
-  description = "The DNS name of the load balancer."
-  value       = aws_lb.main.dns_name
+  value = aws_lb.main.dns_name
 }
 
 output "aws_alb_target_group_arn" {
