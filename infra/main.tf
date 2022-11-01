@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
+  region = var.aws-region
 }
 
 
@@ -45,7 +45,7 @@ module "ecs" {
   source                      = "./ecs"
   name                        = var.name
   environment                 = var.environment
-  region                      = var.aws-region
+  region                      = var.region
   vpc_id                      = module.vpc.id
   subnets                     = module.vpc.private_subnets
   aws_alb_target_group_arn    = module.alb.aws_alb_target_group_arn
@@ -53,7 +53,7 @@ module "ecs" {
   container_port              = var.container_port
   container_cpu               = var.container_cpu
   container_memory            = var.container_memory
-  service_desired_count       = var.service_desired_count
+  desired_tasks               = var.desired_tasks
   container_environment       = [{ name = "LOG_LEVEL", value = "DEBUG" }, { name = "PORT", value = var.container_port }]
 }
 

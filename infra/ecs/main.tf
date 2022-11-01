@@ -38,10 +38,35 @@ resource "aws_iam_role" "ecs_task_role" {
 EOF
 }
 
+resource "aws_iam_policy" "ecs_task_execution_policy" {
+  name = "${var.name}-ecsTaskExecutionRolePolicy"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:*",
+                "logs:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  policy_arn = aws_iam_policy.ecs_task_execution_policy.arn
 }
+
+# resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attachment" {
+#   role       = aws_iam_role.ecs_task_execution_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+# }
 
 resource "aws_security_group" "ecs_tasks" {
   name   = "${var.name}-sg-task-${var.environment}"
@@ -126,7 +151,7 @@ resource "aws_ecs_service" "main" {
   name                               = "${var.name}-service-${var.environment}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
-  desired_count                      = var.service_desired_count
+  desired_count                      = var.desired_tasks
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
   health_check_grace_period_seconds  = 60
@@ -145,7 +170,7 @@ resource "aws_ecs_service" "main" {
     container_port   = var.container_port
   }
 
-  # we ignore task_definition changes as the revision changes on deploy
+  # i ignore task_definition changes as the revision changes on deploy
   # of a new version of the application
   # desired_count is ignored as it can change due to autoscaling policy
   lifecycle {

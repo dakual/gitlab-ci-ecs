@@ -38,7 +38,7 @@ variable "aws_alb_target_group_arn" {
   description = "ARN of the alb target group"
 }
 
-variable "service_desired_count" {
+variable "desired_tasks" {
   description = "Number of services running in parallel"
 }
 
