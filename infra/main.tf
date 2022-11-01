@@ -77,3 +77,7 @@ output "aws_alb_dns_name" {
 output "domain" {
     value = var.domain
 }
+
+output "name_servers" {
+  value = module.r53.name_servers
+}

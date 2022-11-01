@@ -30,3 +30,7 @@ resource "aws_route53_record" "www" {
     evaluate_target_health = true
   }
 }
+
+output "name_servers" {
+  value = aws_route53_zone.main.name_servers
+}
