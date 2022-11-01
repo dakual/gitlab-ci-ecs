@@ -40,15 +40,15 @@ resource "aws_acm_certificate" "main" {
   }
 }
 
-resource "aws_acm_certificate_validation" "main" {
-  certificate_arn = aws_acm_certificate.main.arn
-  validation_record_fqdns = [ aws_route53_record.main.fqdn ]
-}
+# resource "aws_acm_certificate_validation" "main" {
+#   certificate_arn = aws_acm_certificate.main.arn
+#   validation_record_fqdns = [ aws_route53_record.main.fqdn ]
+# }
 
-resource "aws_acm_certificate_validation" "www" {
-  certificate_arn = aws_acm_certificate.main.arn
-  validation_record_fqdns = [ aws_route53_record.www.fqdn ]
-}
+# resource "aws_acm_certificate_validation" "www" {
+#   certificate_arn = aws_acm_certificate.main.arn
+#   validation_record_fqdns = [ aws_route53_record.www.fqdn ]
+# }
 
 output "tls_certificate" {
   value = aws_acm_certificate.main.arn
