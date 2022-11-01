@@ -11,7 +11,8 @@ NEW_TASK_INFO=$(aws ecs register-task-definition --region "${AWS_DEFAULT_REGION}
 if [ -n "$NEW_TASK_INFO" ]; then  
     NEW_REVISION=$(echo $NEW_TASK_INFO | jq '.taskDefinition.revision')
     UPDATE_SERVICE=$(aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --task-definition "${TASK_FAMILY}:$NEW_REVISION")
-    echo "Deployment of $UPDATE_SERVICE complete"
+    echo $UPDATE_SERVICE
+    echo "Deployment of complete"
 else
     echo "exit: No task definition"
     exit;

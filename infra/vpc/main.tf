@@ -140,6 +140,26 @@ resource "aws_iam_role" "vpc-flow-logs-role" {
 EOF
 }
 
+resource "aws_iam_role_policy" "vpc-flow-logs-role-policy" {
+  name = "${var.name}-vpc-flow-logs-role-policy"
+  role = aws_iam_role.vpc-flow-logs-role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy" "vpc-flow-logs-policy" {
   name = "${var.name}-vpc-flow-logs-policy"
   role = aws_iam_role.vpc-flow-logs-role.id
