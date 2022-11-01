@@ -8,6 +8,14 @@ NEW_TASK=$(echo $CURRENT_TASK | jq --arg IMAGE "${ECR_IMAGE}" '.taskDefinition |
 
 NEW_TASK_INFO=$(aws ecs register-task-definition --region "${AWS_DEFAULT_REGION}" --cli-input-json "$NEW_TASK")
 
-NEW_REVISION=$(echo $NEW_TASK_INFO | jq '.taskDefinition.revision')
+if [ -n "$NEW_TASK_INFO" ]; then  
+    NEW_REVISION=$(echo $NEW_TASK_INFO | jq '.taskDefinition.revision')
+    UPDATE_SERVICE=$(aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --task-definition "${TASK_FAMILY}:$NEW_REVISION"
+    echo "Deployment of $UPDATE_SERVICE complete"
+else
+    echo "exit: No task definition"
+    exit;
+fi
 
-aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --task-definition "${TASK_FAMILY}:$NEW_REVISION"
+
+

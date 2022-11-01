@@ -1,6 +1,6 @@
 variables:
   APP: gitlab-app-test
-  TAG: latest
+  TAG: $CI_COMMIT_SHORT_SHA
   ECR: 632296647497.dkr.ecr.eu-central-1.amazonaws.com
   ECR_IMAGE: "${ECR}/${APP}:${TAG}"
   CLUSTER_NAME: gitlab-app-cluster-test
