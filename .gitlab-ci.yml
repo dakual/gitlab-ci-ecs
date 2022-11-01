@@ -106,7 +106,7 @@ aws-deploy:
   stage: deploy
   script:
     # - aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --force-new-deployment
-    - ./new-task.sh
+    - sh new-task.sh
   when: manual
   only:
     - main
