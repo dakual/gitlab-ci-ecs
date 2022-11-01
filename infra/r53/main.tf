@@ -50,6 +50,10 @@ resource "aws_acm_certificate_validation" "www" {
   validation_record_fqdns = [ aws_route53_record.www.fqdn ]
 }
 
+output "tls_certificate" {
+  value = aws_acm_certificate.main.arn
+}
+
 output "name_servers" {
   value = aws_route53_zone.main.name_servers
 }

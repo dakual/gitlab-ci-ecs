@@ -53,10 +53,6 @@ variable "health_check_path" {
   default     = "/"
 }
 
-variable "tsl_certificate_arn" {
-  description = "The ARN of the certificate that the ALB uses for https"
-}
-
 variable "domain" {
   description = "domain name"
 }
