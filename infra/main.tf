@@ -64,7 +64,7 @@ module "ecs" {
   desired_tasks               = var.desired_tasks
   efs_fs_id                   = module.efs.efs_fs_id
   efs_ap_id                   = module.efs.efs_ap_id
-  container_environment       = [{ name = "LOG_LEVEL", value = "DEBUG" }, { name = "PORT", value = var.container_port }]
+  container_environment       = [{ name = "EFS_PATH", value = "/efs" }, { name = "PORT", value = var.container_port }]
 }
 
 # module "r53" {
