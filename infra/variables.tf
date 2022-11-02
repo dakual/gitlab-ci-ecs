@@ -60,4 +60,5 @@ variable "tsl_certificate_arn" {
 
 variable "domain" {
   description = "domain name"
+  default     = "example.com"
 }
