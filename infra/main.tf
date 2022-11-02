@@ -41,6 +41,14 @@ module "ecr" {
   environment = var.environment
 }
 
+module "efs" {
+  source              = "./efs"
+  name                = var.name
+  environment         = var.environment
+  private_subnets     = module.vpc.private_subnets
+  vpc_id              = module.vpc.id
+}
+
 module "ecs" {
   source                      = "./ecs"
   name                        = var.name
@@ -54,6 +62,8 @@ module "ecs" {
   container_cpu               = var.container_cpu
   container_memory            = var.container_memory
   desired_tasks               = var.desired_tasks
+  efs_fs_id                   = module.efs.efs_fs_id
+  efs_ap_id                   = module.efs.efs_ap_id
   container_environment       = [{ name = "LOG_LEVEL", value = "DEBUG" }, { name = "PORT", value = var.container_port }]
 }
 

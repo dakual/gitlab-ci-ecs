@@ -46,3 +46,7 @@ variable "container_environment" {
   description = "The container environmnent variables"
   type        = list
 }
+
+variable "efs_fs_id" {}
+
+variable "efs_ap_id" {}

@@ -131,6 +131,10 @@ resource "aws_ecs_task_definition" "main" {
       containerPort = var.container_port
       hostPort      = var.container_port
     }]
+    mountPoints = [{
+      "sourceVolume"  = "efs",
+      "containerPath" = "/efs"
+    }]
     logConfiguration = {
       logDriver = "awslogs"
       options = {
@@ -140,6 +144,19 @@ resource "aws_ecs_task_definition" "main" {
       }
     }
   }])
+
+  volume {
+    name = "efs"
+    efs_volume_configuration {
+      file_system_id = var.efs_fs_id
+      root_directory = "/"
+      transit_encryption = "ENABLED"
+      authorization_config {
+        access_point_id = var.efs_ap_id
+        iam             = "DISABLED"
+      }
+    }
+  }
 
   tags = {
     Name        = "${var.name}-task-${var.environment}"

@@ -12,7 +12,7 @@ public class AppTest
     @Test
     void test1() {
         AppController controller     = new AppController();
-        Map<String, Object> response = controller.helloWorld();
+        Map<String, Object> response = controller.index();
         String status                = response.get("status").toString();
 
         assertEquals("success", status);
