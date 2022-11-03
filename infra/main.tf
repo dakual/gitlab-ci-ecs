@@ -67,22 +67,18 @@ module "ecs" {
   container_environment       = [{ name = "EFS_PATH", value = "/efs" }, { name = "PORT", value = var.container_port }]
 }
 
-# module "r53" {
-#   source        = "./r53"
-#   name          = var.name
-#   environment   = var.environment
-#   domain        = var.domain
-#   alb_zone_id   = module.alb.zone_id
-#   alb_dns_name  = module.alb.dns_name
-# }
+module "r53" {
+  source        = "./r53"
+  name          = var.name
+  environment   = var.environment
+  domain        = var.domain
+  alb_zone_id   = module.alb.zone_id
+  alb_dns_name  = module.alb.dns_name
+}
 
-# output "domain" {
-#     value = var.domain
-# }
-
-# output "name_servers" {
-#   value = module.r53.name_servers
-# }
+output "domain" {
+    value = var.domain
+}
 
 output "aws_ecr_repository_url" {
     value = module.ecr.repository_url

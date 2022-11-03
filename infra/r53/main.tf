@@ -1,14 +1,9 @@
-resource "aws_route53_zone" "main" {
+data "aws_route53_zone" "main" {
   name = var.domain
-
-  tags = {
-    Name        = "${var.name}-domain-${var.environment}"
-    Environment = var.environment
-  }
 }
 
 resource "aws_route53_record" "main" {
-  zone_id = aws_route53_zone.main.zone_id
+  zone_id = data.aws_route53_zone.main.zone_id
   name    = var.domain
   type    = "A"
 
@@ -20,7 +15,7 @@ resource "aws_route53_record" "main" {
 }
 
 resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.main.zone_id
+  zone_id = data.aws_route53_zone.main.zone_id
   name    = "www"
   type    = "CNAME"
 
@@ -40,20 +35,16 @@ resource "aws_acm_certificate" "main" {
   }
 }
 
-# resource "aws_acm_certificate_validation" "main" {
-#   certificate_arn = aws_acm_certificate.main.arn
-#   validation_record_fqdns = [ aws_route53_record.main.fqdn ]
-# }
+resource "aws_acm_certificate_validation" "main" {
+  certificate_arn = aws_acm_certificate.main.arn
+  validation_record_fqdns = [ aws_route53_record.main.fqdn ]
+}
 
-# resource "aws_acm_certificate_validation" "www" {
-#   certificate_arn = aws_acm_certificate.main.arn
-#   validation_record_fqdns = [ aws_route53_record.www.fqdn ]
-# }
+resource "aws_acm_certificate_validation" "www" {
+  certificate_arn = aws_acm_certificate.main.arn
+  validation_record_fqdns = [ aws_route53_record.www.fqdn ]
+}
 
 output "tls_certificate" {
   value = aws_acm_certificate.main.arn
-}
-
-output "name_servers" {
-  value = aws_route53_zone.main.name_servers
 }

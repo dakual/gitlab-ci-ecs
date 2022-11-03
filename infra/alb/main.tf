@@ -71,49 +71,37 @@ resource "aws_alb_target_group" "main" {
   }
 }
 
-# Redirect traffic to target group
+# Redirect to https listener
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_lb.main.id
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.main.id
-    type             = "forward"
+    type = "redirect"
+
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
-# # Redirect to https listener
-# resource "aws_alb_listener" "http" {
-#   load_balancer_arn = aws_lb.main.id
-#   port              = 80
-#   protocol          = "HTTP"
+# Redirect traffic to target group
+resource "aws_alb_listener" "https" {
+  load_balancer_arn = aws_lb.main.id
+  port              = 443
+  protocol          = "HTTPS"
 
-#   default_action {
-#     type = "redirect"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.alb_tls_cert_arn
 
-#     redirect {
-#       port        = 443
-#       protocol    = "HTTPS"
-#       status_code = "HTTP_301"
-#     }
-#   }
-# }
-
-# # Redirect traffic to target group
-# resource "aws_alb_listener" "https" {
-#   load_balancer_arn = aws_lb.main.id
-#   port              = 443
-#   protocol          = "HTTPS"
-
-#   ssl_policy        = "ELBSecurityPolicy-2016-08"
-#   certificate_arn   = var.alb_tls_cert_arn
-
-#   default_action {
-#       target_group_arn = aws_alb_target_group.main.id
-#       type             = "forward"
-#   }
-# }
+  default_action {
+      target_group_arn = aws_alb_target_group.main.id
+      type             = "forward"
+  }
+}
 
 output "zone_id" {
   value = aws_lb.main.zone_id

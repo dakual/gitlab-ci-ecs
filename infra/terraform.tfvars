@@ -9,3 +9,4 @@ container_memory    = 512
 container_cpu       = 256
 container_port      = 8080
 desired_tasks       = 1
+domain              = "kruta.link"
