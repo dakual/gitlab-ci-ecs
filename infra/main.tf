@@ -18,20 +18,20 @@ provider "aws" {
 module "vpc" {
   source              = "./vpc"
   name                = var.name
+  environment         = var.environment
   cidr                = var.cidr
   private_subnets     = var.private_subnets
   public_subnets      = var.public_subnets
   availability_zones  = var.availability_zones
-  environment         = var.environment
 }
 
 module "alb" {
   source              = "./alb"
   name                = var.name
+  environment         = var.environment
   vpc_id              = module.vpc.id
   subnets             = module.vpc.public_subnets
-  environment         = var.environment
-  alb_tls_cert_arn    = var.tsl_certificate_arn
+  alb_tls_cert_arn    = module.r53.tls_certificate
   health_check_path   = var.health_check_path
 }
 
